@@ -1,0 +1,6 @@
+dependencies:
+  - role: apache_vhost
+    vhost_template: "apache/templates/default.j2"
+    site_name: 000-default
+    site_webroot: "{{sites_dir}}/000-default/www"
+    apache_vhost_avahi_alias: false

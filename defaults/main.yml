@@ -1,0 +1,12 @@
+---
+
+apache_timeout: 300
+apache_keepalive: 'On'
+apache_keepalive_maxrequests: 20
+apache_keepalive_timeout: 3
+apache_mpm_startservers: 5
+apache_mpm_minspareservers: 3
+apache_mpm_maxspareservers: 4
+apache_mpm_maxclients: 8
+apache_mpm_maxrequestsperchild: 10000
+apache_port: 80
