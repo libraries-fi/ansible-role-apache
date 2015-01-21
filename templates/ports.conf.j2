@@ -15,6 +15,7 @@ Listen {{apache_port}}
     # Server Name Indication for SSL named virtual hosts is currently not
     # supported by MSIE on Windows XP.
     Listen 443
+    NameVirtualhost *:443
 </IfModule>
 
 <IfModule mod_gnutls.c>
