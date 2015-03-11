@@ -1,0 +1,11 @@
+<IfModule mod_deflate.c>
+SetOutputFilter DEFLATE
+DeflateFilterNote ratio
+DeflateCompressionLevel 9
+DeflateMemlevel 9
+DeflateWindowSize 15
+SetEnvIfNoCase Request_URI \.(?:gif|jpe?g|png)$ no-gzip dont-vary
+SetEnvIfNoCase Request_URI \.pdf$ no-gzip dont-vary
+SetEnvIfNoCase Request_URI \.(?:exe|t?gz|zip|bz2|xz|rar)$ no-gzip dont-vary
+SetEnvIfNoCase Request_URI \.(?:flv|swf|mp3|ogg)$ no-gzip dont-vary
+</IfModule>

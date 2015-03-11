@@ -22,6 +22,12 @@
             owner=root group=root mode=0644
   notify: restart apache
 
+- name: Write deflate.conf
+  template: src=deflate.conf.j2 dest=/etc/apache2/mods-enabled/deflate.conf
+            owner=root group=root mode=0644
+  notify: restart apache
+
+
 # Set apache and regular user umask to 002 in order to make use of user private
 # groups for sharing access to directories.
 # TODO: Depend on group_sharing_perms or a common var in group_vars?
@@ -37,6 +43,8 @@
    - rewrite.load
   notify:
    - restart apache
+
+
 
 
 - name: Ensure apache is running
