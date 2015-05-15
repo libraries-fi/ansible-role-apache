@@ -46,6 +46,3 @@
 
 
 
-
-- name: Ensure apache is running
-  action: service name=apache2 state=running
