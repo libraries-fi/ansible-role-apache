@@ -39,10 +39,6 @@
 
 # Activate a number of Apache modules.
 - file: state=link src=/etc/apache2/mods-available/{{item}} path=/etc/apache2/mods-enabled/{{item}}
-  with_items:
-   - rewrite.load
+  with_items: apache_enabled_modules
   notify:
    - restart apache
-
-
-
