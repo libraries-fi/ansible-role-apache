@@ -12,3 +12,4 @@ apache_mpm_maxrequestsperchild: 10000
 apache_port: 80
 apache_enabled_modules:
   - rewrite.load
+  - setenvif.load
