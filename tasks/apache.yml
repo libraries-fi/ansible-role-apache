@@ -1,16 +1,30 @@
 - name: Install package apache2
   action: apt pkg=apache2 state=present
 
-- name: write apache2 security related config file
-  action: copy src=security dest=/etc/apache2/conf.d/security
-             owner=root group=root mode=0644
+- name: Install config fragments
+  template: src={{ item }}.j2 dest={{ apache_conf_fragment_dir }}/{{ item }}{{ apache_conf_fragment_suffix }}
   notify:
     - restart apache
+  with_items: apache_conf_install_fragments
 
-- name: Install directory config for robots.txt directory
-  template: src=robots.j2 dest=/etc/apache2/conf.d/robots
+- name: Enable config fragments (jessie)
+  file:
+    state=link
+    src=/etc/apache2/conf-available/{{item}}{{ apache_conf_fragment_suffix }}
+    path=/etc/apache2/conf-enabled/{{item}}{{ apache_conf_fragment_suffix }}
+  with_items: apache_conf_install_fragments
   notify:
     - restart apache
+  when: ansible_distribution == 'Debian' and ansible_distribution_release == 'jessie'
+
+- name: Remove default vhost config on jessie.
+  file:
+    path=/etc/apache2/sites-enabled/000-default.conf
+    state=absent
+  notify:
+    - restart apache
+  when: ansible_distribution == 'Debian' and ansible_distribution_release == 'jessie'
+
 
 - name: Write apache2.conf
   template: src=apache2.conf.j2 dest=/etc/apache2/apache2.conf

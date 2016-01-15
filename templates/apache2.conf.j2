@@ -87,8 +87,11 @@
 #
 # The accept serialization lock file MUST BE STORED ON A LOCAL DISK.
 #
+{% if apache_version == 2.2 %}
 LockFile ${APACHE_LOCK_DIR}/accept.lock
-
+{% else %}
+Mutex file:${APACHE_LOCK_DIR} default
+{% endif %}
 #
 # PidFile: The file in which the server should record its process
 # identification number when it starts.
@@ -263,7 +266,7 @@ LogFormat "%{User-agent}i" agent
 # see the comments above for details.
 
 # Include generic snippets of statements
-Include conf.d/
+Include {{ apache_conf_fragment_subdir }}/
 
 # Include the virtual host configurations:
 Include sites-enabled/

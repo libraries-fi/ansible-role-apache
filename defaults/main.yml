@@ -13,3 +13,13 @@ apache_port: 80
 apache_enabled_modules:
   - rewrite.load
   - setenvif.load
+
+apache_conf_fragment_subdir: "{{ (ansible_distribution_release == 'jessie') | ternary('conf-available','conf.d') }}"
+apache_conf_fragment_dir: /etc/apache2/{{ apache_conf_fragment_subdir }}
+
+apache_conf_fragment_suffix: "{{ (ansible_distribution_release == 'jessie') | ternary('.conf','') }}"
+apache_conf_install_fragments:
+  - security
+  - robots
+
+apache_version: 2.2

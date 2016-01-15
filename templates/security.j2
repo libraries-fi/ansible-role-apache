@@ -57,6 +57,13 @@ TraceEnable Off
 </DirectoryMatch>
 
 #
+# Forbid access to several file types (http://projektit.kirjastot.fi/issues/4494)
+#
+<FilesMatch "\.(gitmodule|gitattributes|sql|dmp)$">
+	Deny from all
+</FilesMatch>
+
+#
 # Setting this header will prevent MSIE from interpreting files as something
 # else than declared by the content type in the HTTP headers.
 # Requires mod_headers to be enabled.
