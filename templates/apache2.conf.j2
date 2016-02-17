@@ -88,9 +88,9 @@
 # The accept serialization lock file MUST BE STORED ON A LOCAL DISK.
 #
 {% if apache_version == 2.2 %}
-Mutex file:${APACHE_LOCK_DIR} default
-{% else %}
 LockFile ${APACHE_LOCK_DIR}/accept.lock
+{% else %}
+Mutex file:${APACHE_LOCK_DIR} default
 {% endif %}
 #
 # PidFile: The file in which the server should record its process
