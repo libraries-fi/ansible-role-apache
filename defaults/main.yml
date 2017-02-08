@@ -10,6 +10,11 @@ apache_mpm_maxspareservers: 4
 apache_mpm_maxclients: 8
 apache_mpm_maxrequestsperchild: 10000
 apache_port: 80
+
+apache_packages:
+  - apache2
+  - libapache2-mod-rpaf
+
 apache_enabled_modules:
   - rewrite.load
   - setenvif.load

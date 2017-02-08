@@ -1,5 +1,6 @@
-- name: Install package apache2
-  action: apt pkg=apache2 state=present
+- name: Install apache packages
+  action: apt pkg={{ item }} state=present
+  with_items: apache_packages
 
 - name: Install config fragments
   template: src={{ item }}.j2 dest={{ apache_conf_fragment_dir }}/{{ item }}{{ apache_conf_fragment_suffix }}
@@ -36,9 +37,12 @@
             owner=root group=root mode=0644
   notify: restart apache
 
-- name: Write deflate.conf
-  template: src=deflate.conf.j2 dest=/etc/apache2/mods-enabled/deflate.conf
+- name: Write apache module configuration files
+  template: src={{ item }}.j2 dest=/etc/apache2/mods-available/{{ item }}
             owner=root group=root mode=0644
+  with_items:
+    - deflate.conf
+    - rpaf.conf
   notify: restart apache
 
 

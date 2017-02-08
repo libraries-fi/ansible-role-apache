@@ -1,0 +1,6 @@
+<IfModule rpaf_module>
+RPAFenable On
+RPAFsethostname On
+RPAFproxy_ips 127.0.0.1 ::1 {{ ansible_default_ipv4.address }}
+RPAFheader X-Forwarded-For
+</IfModule>
