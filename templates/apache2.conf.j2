@@ -87,7 +87,7 @@
 #
 # The accept serialization lock file MUST BE STORED ON A LOCAL DISK.
 #
-{% if apache_version == 2.2 %}
+{% if apache_version == "2.2" %}
 LockFile ${APACHE_LOCK_DIR}/accept.lock
 {% else %}
 Mutex file:${APACHE_LOCK_DIR} default

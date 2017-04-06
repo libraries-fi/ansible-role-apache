@@ -14,10 +14,17 @@ apache_port: 80
 apache_packages:
   - apache2
   - libapache2-mod-rpaf
+  - apache2-mpm-prefork
 
 apache_enabled_modules:
   - rewrite.load
   - setenvif.load
+
+apache24_enabled_modules:
+  - mpm_prefork.load
+
+apache_disabled_modules:
+  - mpm_event.load
 
 apache_conf_fragment_subdir: "{{ (ansible_distribution_release == 'jessie') | ternary('conf-available','conf.d') }}"
 apache_conf_fragment_dir: /etc/apache2/{{ apache_conf_fragment_subdir }}
@@ -27,4 +34,4 @@ apache_conf_install_fragments:
   - security
   - robots
 
-apache_version: 2.2
+apache_version: "{{ 2.4 if (ansible_distribution == 'Debian' and ansible_distribution_version | version_compare('8.0', '>=')) else 2.2 }}"
