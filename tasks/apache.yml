@@ -1,6 +1,12 @@
 - name: Install apache packages
   action: apt pkg={{ item }} state=present
-  with_items: apache_packages
+  with_items: "{{ apache_packages }}"
+
+- name: Install apache packages (non-stretch)
+  action: apt pkg={{ item }} state=present
+  with_items: "{{ apache_non_stretch_packages }}"
+  when: ansible_distribution_release  != "stretch"
+
 
 - name: Install config fragments
   template: src={{ item }}.j2 dest={{ apache_conf_fragment_dir }}/{{ item }}{{ apache_conf_fragment_suffix }}
@@ -16,7 +22,8 @@
   with_items: apache_conf_install_fragments
   notify:
     - restart apache
-  when: ansible_distribution == 'Debian' and ansible_distribution_release == 'jessie'
+  when: ansible_distribution == 'Debian' and ansible_distribution_release != 'wheezy'
+
 
 - name: Remove default vhost config on jessie.
   file:
@@ -24,7 +31,7 @@
     state=absent
   notify:
     - restart apache
-  when: ansible_distribution == 'Debian' and ansible_distribution_release == 'jessie'
+  when: ansible_distribution == 'Debian' and ansible_distribution_release != 'wheezy'
 
 
 - name: Write apache2.conf
