@@ -31,6 +31,8 @@ apache_disabled_modules:
 
 apache_conf_fragment_subdir: "{{ (ansible_distribution_release != 'wheezy') | ternary('conf-available','conf.d') }}"
 apache_conf_fragment_dir: /etc/apache2/{{ apache_conf_fragment_subdir }}
+apache_conf_error_log: "${APACHE_LOG_DIR}/error.log"
+apache_conf_error_log_level: warn
 
 apache_conf_fragment_suffix: "{{ (ansible_distribution_release != 'wheezy') | ternary('.conf','') }}"
 apache_conf_install_fragments:
