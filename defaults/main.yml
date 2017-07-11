@@ -38,5 +38,6 @@ apache_conf_fragment_suffix: "{{ (ansible_distribution_release != 'wheezy') | te
 apache_conf_install_fragments:
   - security
   - robots
+  - other-vhosts-access-log
 
 apache_version: "{{ 2.4 if (ansible_distribution == 'Debian' and ansible_distribution_version | version_compare('8.0', '>=')) else 2.2 }}"
