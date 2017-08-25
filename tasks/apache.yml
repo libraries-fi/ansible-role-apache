@@ -71,7 +71,7 @@
 - name: Activate a number of Apache 2.4 modules.
   file: state=link src=/etc/apache2/mods-available/{{item}} path=/etc/apache2/mods-enabled/{{item}}
   with_items: apache24_enabled_modules
-  when: apache_version == 2.4
+  when: apache_version == "2.4"
   notify:
    - restart apache
 
