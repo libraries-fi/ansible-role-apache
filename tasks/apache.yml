@@ -12,14 +12,14 @@
   template: src={{ item }}.j2 dest={{ apache_conf_fragment_dir }}/{{ item }}{{ apache_conf_fragment_suffix }}
   notify:
     - restart apache
-  with_items: apache_conf_install_fragments
+  with_items: "{{ apache_conf_install_fragments }}"
 
 - name: Enable config fragments (jessie)
   file:
     state=link
     src=/etc/apache2/conf-available/{{item}}{{ apache_conf_fragment_suffix }}
     path=/etc/apache2/conf-enabled/{{item}}{{ apache_conf_fragment_suffix }}
-  with_items: apache_conf_install_fragments
+  with_items: "{{ apache_conf_install_fragments }}"
   notify:
     - restart apache
   when: ansible_distribution == 'Debian' and ansible_distribution_release != 'wheezy'
@@ -64,13 +64,13 @@
 
 - name: Activate a number of Apache modules.
   file: state=link src=/etc/apache2/mods-available/{{item}} path=/etc/apache2/mods-enabled/{{item}}
-  with_items: apache_enabled_modules
+  with_items: "{{ apache_enabled_modules }}"
   notify:
    - restart apache
 
 - name: Activate a number of Apache 2.4 modules.
   file: state=link src=/etc/apache2/mods-available/{{item}} path=/etc/apache2/mods-enabled/{{item}}
-  with_items: apache24_enabled_modules
+  with_items: "{{ apache24_enabled_modules }}"
   when: apache_version == "2.4"
   notify:
    - restart apache
@@ -78,6 +78,6 @@
 
 - name: Disable a number of Apache modules.
   file: state=absent path=/etc/apache2/mods-enabled/{{item}}
-  with_items: apache_disabled_modules
+  with_items: "{{ apache_disabled_modules }}"
   notify:
    - restart apache
