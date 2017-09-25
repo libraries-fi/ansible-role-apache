@@ -56,9 +56,12 @@
 # Set apache and regular user umask to 002 in order to make use of user private
 # groups for sharing access to directories.
 # TODO: Depend on group_sharing_perms or a common var in group_vars?
-- name: write apache2 envvars
-  action: copy src=../files/envvars dest=/etc/apache2/envvars
-             owner=root group=root mode=0644
+- name: Set apache umask to 002
+  lineinfile:
+    dest: /etc/apache2/envvars
+    line: "umask 002"
+    insertafter: EOF
+    state: present
   notify:
     - restart apache
 
