@@ -20,14 +20,14 @@ apache_non_stretch_packages:
 
 
 apache_enabled_modules:
-  - rewrite.load
-  - setenvif.load
+  - rewrite
+  - setenvif
 
 apache24_enabled_modules:
-  - mpm_prefork.load
+  - mpm_prefork
 
 apache_disabled_modules:
-  - mpm_event.load
+  - mpm_event
 
 apache_conf_fragment_subdir: "{{ (ansible_distribution_release != 'wheezy') | ternary('conf-available','conf.d') }}"
 apache_conf_fragment_dir: /etc/apache2/{{ apache_conf_fragment_subdir }}
