@@ -63,21 +63,26 @@
     - restart apache
 
 - name: Activate a number of Apache modules.
-  file: state=link src=/etc/apache2/mods-available/{{item}} path=/etc/apache2/mods-enabled/{{item}}
+  apache2_module:
+    state: present
+    name: "{{item}}"
   with_items: "{{ apache_enabled_modules }}"
   notify:
    - restart apache
 
 - name: Activate a number of Apache 2.4 modules.
-  file: state=link src=/etc/apache2/mods-available/{{item}} path=/etc/apache2/mods-enabled/{{item}}
+  apache2_module:
+    state: present
+    name: "{{item}}"
   with_items: "{{ apache24_enabled_modules }}"
   when: apache_version == "2.4"
   notify:
    - restart apache
 
-
 - name: Disable a number of Apache modules.
-  file: state=absent path=/etc/apache2/mods-enabled/{{item}}
+  apache2_module:
+    state: absent
+    name: "{{item}}"
   with_items: "{{ apache_disabled_modules }}"
   notify:
    - restart apache
