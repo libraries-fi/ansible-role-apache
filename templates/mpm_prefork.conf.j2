@@ -1,0 +1,17 @@
+# prefork MPM
+# StartServers: number of server processes to start
+# MinSpareServers: minimum number of server processes which are kept spare
+# MaxSpareServers: maximum number of server processes which are kept spare
+# MaxClients: maximum number of server processes allowed to start
+# MaxRequestsPerChild: maximum number of requests a server process serves
+<IfModule mpm_prefork_module>
+    StartServers          {{apache_mpm_startservers}}
+    MinSpareServers       {{apache_mpm_minspareservers}}
+    MaxSpareServers      {{apache_mpm_maxspareservers}}
+{% if apache_version == "2.2" %}
+    MaxClients          {{apache_mpm_maxclients}}
+{% else %}
+    MaxRequestWorkers          {{apache_mpm_maxclients}}
+{% endif %}
+    MaxRequestsPerChild   {{apache_mpm_maxrequestsperchild}}
+</IfModule>

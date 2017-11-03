@@ -50,6 +50,7 @@
   with_items:
     - deflate.conf
     - rpaf.conf
+    - mpm_prefork.conf
   notify: restart apache
 
 
