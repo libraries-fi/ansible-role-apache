@@ -50,6 +50,7 @@
   with_items:
     - deflate.conf
     - rpaf.conf
+    - mpm_prefork.conf
   notify: restart apache
 
 
@@ -61,6 +62,15 @@
              owner=root group=root mode=0644
   notify:
     - restart apache
+
+- name: Disable a number of Apache modules.
+  apache2_module:
+    state: absent
+    name: "{{item}}"
+  with_items: "{{ apache_disabled_modules }}"
+  notify:
+   - restart apache
+  when: ansible_distribution_release != "wheezy" # Delete when Wheezy is EOL
 
 - name: Activate a number of Apache modules.
   apache2_module:
@@ -76,13 +86,5 @@
     name: "{{item}}"
   with_items: "{{ apache24_enabled_modules }}"
   when: apache_version == "2.4"
-  notify:
-   - restart apache
-
-- name: Disable a number of Apache modules.
-  apache2_module:
-    state: absent
-    name: "{{item}}"
-  with_items: "{{ apache_disabled_modules }}"
   notify:
    - restart apache

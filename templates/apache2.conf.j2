@@ -123,6 +123,9 @@ MaxKeepAliveRequests {{apache_keepalive_maxrequests}}
 #
 KeepAliveTimeout {{apache_keepalive_timeout}}
 
+# The following MPM Prefork configs can be
+# deleted when there are no Wheezy machines.
+
 ##
 ## Server-Pool Size Regulation (MPM specific)
 ##
@@ -143,43 +146,6 @@ KeepAliveTimeout {{apache_keepalive_timeout}}
     MaxRequestWorkers          {{apache_mpm_maxclients}}
 {% endif %}
     MaxRequestsPerChild   {{apache_mpm_maxrequestsperchild}}
-</IfModule>
-
-# worker MPM
-# StartServers: initial number of server processes to start
-# MinSpareThreads: minimum number of worker threads which are kept spare
-# MaxSpareThreads: maximum number of worker threads which are kept spare
-# ThreadLimit: ThreadsPerChild can be changed to this maximum value during a
-#              graceful restart. ThreadLimit can only be changed by stopping
-#              and starting Apache.
-# ThreadsPerChild: constant number of worker threads in each server process
-# MaxClients: maximum number of simultaneous client connections
-# MaxRequestsPerChild: maximum number of requests a server process serves
-<IfModule mpm_worker_module>
-    StartServers          2
-    MinSpareThreads      25
-    MaxSpareThreads      75
-    ThreadLimit          64
-    ThreadsPerChild      25
-    MaxClients          150
-    MaxRequestsPerChild   0
-</IfModule>
-
-# event MPM
-# StartServers: initial number of server processes to start
-# MinSpareThreads: minimum number of worker threads which are kept spare
-# MaxSpareThreads: maximum number of worker threads which are kept spare
-# ThreadsPerChild: constant number of worker threads in each server process
-# MaxClients: maximum number of simultaneous client connections
-# MaxRequestsPerChild: maximum number of requests a server process serves
-<IfModule mpm_event_module>
-    StartServers          2
-    MinSpareThreads      25
-    MaxSpareThreads      75
-    ThreadLimit          64
-    ThreadsPerChild      25
-    MaxClients          150
-    MaxRequestsPerChild   0
 </IfModule>
 
 # These need to be set in /etc/apache2/envvars
