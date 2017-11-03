@@ -70,7 +70,7 @@
   with_items: "{{ apache_disabled_modules }}"
   notify:
    - restart apache
-  when: ansible_distribution_release != "wheezy" # Delete when Weezy is EOL
+  when: ansible_distribution_release != "wheezy" # Delete when Wheezy is EOL
 
 - name: Activate a number of Apache modules.
   apache2_module:
