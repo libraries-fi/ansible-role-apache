@@ -67,24 +67,26 @@
   apache2_module:
     state: absent
     name: "{{item}}"
+    ignore_configcheck: yes
   with_items: "{{ apache_disabled_modules }}"
   notify:
    - restart apache
   when: ansible_distribution_release != "wheezy" # Delete when Wheezy is EOL
+
+- name: Activate a number of Apache 2.4 modules.
+  apache2_module:
+    state: present
+    name: "{{item}}"
+    ignore_configcheck: yes
+  with_items: "{{ apache24_enabled_modules }}"
+  when: apache_version == "2.4"
+  notify:
+   - restart apache
 
 - name: Activate a number of Apache modules.
   apache2_module:
     state: present
     name: "{{item}}"
   with_items: "{{ apache_enabled_modules }}"
-  notify:
-   - restart apache
-
-- name: Activate a number of Apache 2.4 modules.
-  apache2_module:
-    state: present
-    name: "{{item}}"
-  with_items: "{{ apache24_enabled_modules }}"
-  when: apache_version == "2.4"
   notify:
    - restart apache
