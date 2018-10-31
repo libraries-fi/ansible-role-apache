@@ -41,3 +41,5 @@ apache_conf_install_fragments:
   - other-vhosts-access-log
 
 apache_version: "{{ '2.4' if (ansible_distribution == 'Debian' and ansible_distribution_version | version_compare('8.0', '>=')) else '2.2' }}"
+
+apache_pid_file: "/var/run/apache2$SUFFIX/apache2.pid"
