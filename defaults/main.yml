@@ -29,17 +29,11 @@ apache24_enabled_modules:
 apache_disabled_modules:
   - mpm_event
 
-apache_conf_fragment_subdir: "{{ (ansible_distribution_release != 'wheezy') | ternary('conf-available','conf.d') }}"
 apache_conf_fragment_dir: /etc/apache2/{{ apache_conf_fragment_subdir }}
 apache_conf_error_log: "${APACHE_LOG_DIR}/error.log"
 apache_conf_error_log_level: warn
 
-apache_conf_fragment_suffix: "{{ (ansible_distribution_release != 'wheezy') | ternary('.conf','') }}"
 apache_conf_install_fragments:
   - security
   - robots
   - other-vhosts-access-log
-
-apache_version: "{{ '2.4' if (ansible_distribution == 'Debian' and ansible_distribution_version | version_compare('8.0', '>=')) else '2.2' }}"
-
-apache_pid_file: "/var/run/apache2$SUFFIX/apache2.pid"

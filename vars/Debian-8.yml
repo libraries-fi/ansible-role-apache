@@ -1,0 +1,4 @@
+apache_conf_fragment_subdir: "conf-available"
+apache_conf_fragment_suffix: ".conf"
+apache_version: "2.4" 
+apache_pid_file: "/var/run/apache2$SUFFIX/apache2.pid"
