@@ -11,23 +11,9 @@ apache_mpm_maxclients: 8
 apache_mpm_maxrequestsperchild: 10000
 apache_port: 80
 
-apache_packages:
-  - apache2
-  - libapache2-mod-rpaf
+apache_enabled_modules: []
 
-apache_non_stretch_packages:
-  - apache2-mpm-prefork
-
-
-apache_enabled_modules:
-  - rewrite
-  - setenvif
-
-apache24_enabled_modules:
-  - mpm_prefork
-
-apache_disabled_modules:
-  - mpm_event
+apache_disabled_modules: []
 
 apache_conf_fragment_dir: /etc/apache2/{{ apache_conf_fragment_subdir }}
 apache_conf_error_log: "${APACHE_LOG_DIR}/error.log"

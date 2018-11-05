@@ -6,13 +6,8 @@
     - "{{ ansible_distribution }}-{{ ansible_distribution_major_version}}.yml"
 
 - name: Install apache packages
-  action: apt pkg={{ item }} state=present
-  with_items: "{{ apache_packages }}"
-
-- name: Install apache packages (non-stretch)
-  action: apt pkg={{ item }} state=present
-  with_items: "{{ apache_non_stretch_packages }}"
-  when: ansible_distribution_release  != "stretch"
+  apt:
+    name: "{{ apache_packages }}"
 
 - name: Install config fragments
   template: src={{ item }}.j2 dest={{ apache_conf_fragment_dir }}/{{ item }}{{ apache_conf_fragment_suffix }}
@@ -76,17 +71,6 @@
     name: "{{item}}"
     ignore_configcheck: yes
   with_items: "{{ apache_disabled_modules }}"
-  notify:
-   - restart apache
-  when: ansible_distribution_release != "wheezy" # Delete when Wheezy is EOL
-
-- name: Activate a number of Apache 2.4 modules.
-  apache2_module:
-    state: present
-    name: "{{item}}"
-    ignore_configcheck: yes
-  with_items: "{{ apache24_enabled_modules }}"
-  when: apache_version == "2.4"
   notify:
    - restart apache
 
