@@ -5,9 +5,11 @@ apache_pid_file: "/var/run/apache2$SUFFIX/apache2.pid"
 apache_packages:
   - apache2
   - libapache2-mod-rpaf
+
+# mpm_* module should be the first module to be enabled.
 apache_enabled_modules:
+  - mpm_prefork
   - rewrite
   - setenvif
-  - mpm_prefork
 apache_disabled_modules:
   - mpm_event

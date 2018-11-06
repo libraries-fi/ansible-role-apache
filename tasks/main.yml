@@ -69,15 +69,16 @@
   apache2_module:
     state: absent
     name: "{{item}}"
-    ignore_configcheck: yes
+    ignore_configcheck: True
   with_items: "{{ apache_disabled_modules }}"
   notify:
-   - restart apache
+    - restart apache
 
 - name: Activate a number of Apache modules.
   apache2_module:
     state: present
     name: "{{item}}"
+    ignore_configcheck: True
   with_items: "{{ apache_enabled_modules }}"
   notify:
-   - restart apache
+    - restart apache
