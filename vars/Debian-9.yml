@@ -6,7 +6,6 @@ apache_packages:
   - apache2
   - libapache2-mod-rpaf
 
-# mpm_* module should be the first module to be enabled.
 apache_enabled_modules:
   - mpm_prefork
   - rewrite

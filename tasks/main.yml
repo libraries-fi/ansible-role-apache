@@ -74,11 +74,21 @@
   notify:
     - restart apache
 
-- name: Activate a number of Apache modules.
+- name: Activate Apache mpm modules first.
   apache2_module:
     state: present
     name: "{{item}}"
     ignore_configcheck: True
-  with_items: "{{ apache_enabled_modules }}"
+  loop: "{{ apache_enabled_modules }}"
+  when: "{{ item.startswith('mpm_') }}"
+  notify:
+    - restart apache
+
+- name: Activate Apache modules.
+  apache2_module:
+    state: present
+    name: "{{item}}"
+  loop: "{{ apache_enabled_modules }}"
+  when: "{{ not item.startswith('mpm_') }}"
   notify:
     - restart apache
