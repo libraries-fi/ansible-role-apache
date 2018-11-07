@@ -80,7 +80,7 @@
     name: "{{item}}"
     ignore_configcheck: True
   loop: "{{ apache_enabled_modules }}"
-  when: "{{ item.startswith('mpm_') }}"
+  when: item.startswith('mpm_')
   notify:
     - restart apache
 
@@ -89,6 +89,6 @@
     state: present
     name: "{{item}}"
   loop: "{{ apache_enabled_modules }}"
-  when: "{{ not item.startswith('mpm_') }}"
+  when: not item.startswith('mpm_')
   notify:
     - restart apache
