@@ -1,5 +1,94 @@
 ---
-# file: webserver/tasks/main.yml
 
-- include: apache.yml
+- name: Gather os specific variables.
+  include_vars: "{{ item }}"
+  with_first_found:
+    - "{{ ansible_distribution }}-{{ ansible_distribution_major_version}}.yml"
 
+- name: Install apache packages
+  apt:
+    name: "{{ apache_packages }}"
+
+- name: Install config fragments
+  template: src={{ item }}.j2 dest={{ apache_conf_fragment_dir }}/{{ item }}{{ apache_conf_fragment_suffix }}
+  notify:
+    - restart apache
+  with_items: "{{ apache_conf_install_fragments }}"
+
+- name: Enable config fragments (jessie)
+  file:
+    state=link
+    src=/etc/apache2/conf-available/{{item}}{{ apache_conf_fragment_suffix }}
+    path=/etc/apache2/conf-enabled/{{item}}{{ apache_conf_fragment_suffix }}
+  with_items: "{{ apache_conf_install_fragments }}"
+  notify:
+    - restart apache
+  when: ansible_distribution == 'Debian' and ansible_distribution_release != 'wheezy'
+
+- name: Remove default vhost config on jessie.
+  file:
+    path=/etc/apache2/sites-enabled/000-default.conf
+    state=absent
+  notify:
+    - restart apache
+  when: ansible_distribution == 'Debian' and ansible_distribution_release != 'wheezy'
+
+- name: Write apache2.conf
+  template: src=apache2.conf.j2 dest=/etc/apache2/apache2.conf
+            owner=root group=root mode=0644
+  notify: restart apache
+
+- name: Write ports.conf
+  template: src=ports.conf.j2 dest=/etc/apache2/ports.conf
+            owner=root group=root mode=0644
+  notify: restart apache
+
+- name: Write apache module configuration files
+  template: src={{ item }}.j2 dest=/etc/apache2/mods-available/{{ item }}
+            owner=root group=root mode=0644
+  with_items:
+    - deflate.conf
+    - rpaf.conf
+    - mpm_prefork.conf
+  notify: restart apache
+
+# Set apache and regular user umask to 002 in order to make use of user private
+# groups for sharing access to directories.
+# TODO: Depend on group_sharing_perms or a common var in group_vars?
+- name: write apache2 envvars
+  template:
+    src: envvars.j2
+    dest: /etc/apache2/envvars
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+    - restart apache
+
+- name: Disable a number of Apache modules.
+  apache2_module:
+    state: absent
+    name: "{{item}}"
+    ignore_configcheck: True
+  with_items: "{{ apache_disabled_modules }}"
+  notify:
+    - restart apache
+
+- name: Activate Apache mpm modules first.
+  apache2_module:
+    state: present
+    name: "{{item}}"
+    ignore_configcheck: True
+  loop: "{{ apache_enabled_modules }}"
+  when: item.startswith('mpm_')
+  notify:
+    - restart apache
+
+- name: Activate Apache modules.
+  apache2_module:
+    state: present
+    name: "{{item}}"
+  loop: "{{ apache_enabled_modules }}"
+  when: not item.startswith('mpm_')
+  notify:
+    - restart apache

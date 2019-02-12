@@ -1,0 +1,11 @@
+apache_conf_fragment_subdir: conf.d
+apache_conf_fragment_suffix: ""
+apache_version: "2.2" 
+apache_pid_file: "/var/run/apache2$SUFFIX.pid"
+apache_packages:
+  - apache2
+  - libapache2-mod-rpaf
+  - apache2-mpm-prefork
+apache_enabled_modules:
+  - rewrite
+  - setenvif
