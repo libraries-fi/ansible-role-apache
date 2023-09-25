@@ -1,10 +1,5 @@
 ---
 
-- name: Gather os specific variables.
-  include_vars: "{{ item }}"
-  with_first_found:
-    - "{{ ansible_distribution }}-{{ ansible_distribution_major_version}}.yml"
-
 - name: Install apache packages
   apt:
     name: "{{ apache_packages }}"
@@ -15,7 +10,7 @@
     - restart apache
   with_items: "{{ apache_conf_install_fragments }}"
 
-- name: Enable config fragments (jessie)
+- name: Enable config fragments
   file:
     state=link
     src=/etc/apache2/conf-available/{{item}}{{ apache_conf_fragment_suffix }}
@@ -23,15 +18,13 @@
   with_items: "{{ apache_conf_install_fragments }}"
   notify:
     - restart apache
-  when: ansible_distribution == 'Debian' and ansible_distribution_release != 'wheezy'
 
-- name: Remove default vhost config on jessie.
+- name: Remove default vhost config.
   file:
     path=/etc/apache2/sites-enabled/000-default.conf
     state=absent
   notify:
     - restart apache
-  when: ansible_distribution == 'Debian' and ansible_distribution_release != 'wheezy'
 
 - name: Write apache2.conf
   template: src=apache2.conf.j2 dest=/etc/apache2/apache2.conf

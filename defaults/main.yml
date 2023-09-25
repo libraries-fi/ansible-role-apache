@@ -11,9 +11,20 @@ apache_mpm_maxclients: 8
 apache_mpm_maxrequestsperchild: 10000
 apache_port: 80
 
-apache_enabled_modules: []
+apache_conf_fragment_subdir: "conf-available"
+apache_conf_fragment_suffix: ".conf"
+apache_version: "2.4" 
+apache_pid_file: "/var/run/apache2$SUFFIX/apache2.pid"
+apache_packages:
+  - apache2
+  - libapache2-mod-rpaf
 
-apache_disabled_modules: []
+apache_enabled_modules:
+  - mpm_prefork
+  - rewrite
+  - setenvif
+apache_disabled_modules:
+  - mpm_event
 
 apache_conf_fragment_dir: /etc/apache2/{{ apache_conf_fragment_subdir }}
 apache_conf_error_log: "${APACHE_LOG_DIR}/error.log"
