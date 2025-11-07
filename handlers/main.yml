@@ -1,3 +1,3 @@
 # file: webserver/handlers/main.yml
 ---
-- include: apache.yml
+- import_tasks: apache.yml
